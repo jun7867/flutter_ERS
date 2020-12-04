@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "62798671785",
+    "firebase_url": "https://ers-service.firebaseio.com",
+    "project_id": "ers-service",
+    "storage_bucket": "ers-service.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62798671785:android:e715ac327b16b140761eb8",
+        "android_client_info": {
+          "package_name": "com.example.ers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62798671785-dcafbmj6s77ebppqm0gl7p0raab49oja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBne_DJcVE-gc4cXzmg4MwMm-n20AtJiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62798671785-dcafbmj6s77ebppqm0gl7p0raab49oja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
