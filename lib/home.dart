@@ -18,18 +18,55 @@ class HomePage extends StatefulWidget {
 }
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   String dropdownValue = 'ASC';
-  // int _selectedIndex = 0;
-  // PageController pageController = PageController();
-  //
-  // void _onItemTapped(int index) {
-  //   pageController.jumpToPage(index);
-  // }
-  // void _onPageChanged(int index) {
-  //   setState(() => _selectedIndex = index);
-  // }
-  // final List<Widget> _widgets = <Widget>[
-  // ];
-  // https://dopble2k.tistory.com/9
+  int _selectedIndex = 0;
+
+  _tapNavBar(index) {
+    print('Tapped!'+index.toString());
+    if (index==0){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage(),
+            settings: RouteSettings(
+              // arguments: product,
+            )),
+      );
+    }
+    if (index==1){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddPage(),
+            settings: RouteSettings(
+              // arguments: product,
+            )),
+      );
+    }
+    if (index==2){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage(),
+            settings: RouteSettings(
+              // arguments: product,
+            )),
+      );
+    }
+    if (index==3){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyPage(),
+            settings: RouteSettings(
+              // arguments: product,
+            )),
+      );
+    }
+
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +74,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       appBar: AppBar(
         leading:  IconButton(
           icon: Icon(
-            Icons.people,
+            Icons.person_rounded,
             semanticLabel: 'menu',
           ),
           onPressed: () {
@@ -78,14 +115,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body:
 
       _buildGridCards(context),
-
-      // Stack(
-      //   children: <Widget> [
-      //
-      //     Dropdown(context),
-      //   ],
-      // ),
-      // resizeToAvoidBottomInset: false,
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.black,
+        currentIndex: _selectedIndex,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.edit),
+            label: 'search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'message',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_rounded),
+            label: 'profile',
+          ),
+        ],
+        fixedColor: Colors.black,
+        onTap: _tapNavBar,
+      ),
     );
   }
   Widget Dropdown(BuildContext context) {
@@ -128,9 +181,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             default:
               return GridView.count(
               //   return ListView.builder(
-                crossAxisCount: 2,
+                crossAxisCount: 1,
                 padding: EdgeInsets.all(16.0),
-                childAspectRatio: 8.0 / 9.0,
+                childAspectRatio: 8.0 / 6.0,
                 children: snapshot.data.docs.map((data) {
                   final record = Record.fromSnapshot(data);
                   final ThemeData theme = Theme.of(context);
@@ -143,9 +196,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       children: <Widget>[
 
                         AspectRatio(
-                          aspectRatio: 18 / 11,
+                          // aspectRatio: 18 / 11,
+                          aspectRatio: 32 / 15,
                           child: Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/'+record.name+'.png?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
+                            'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/'+record.name+'.jpg?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
                             fit: BoxFit.fitWidth,
                           ),
                         ),
@@ -157,33 +211,44 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               children: <Widget>[
                                 Text(
                                   record.title,
-                                  style: theme.textTheme.subtitle2,
+                                  style: theme.textTheme.subtitle1,
                                   maxLines: 1,
                                 ),
                                 Text(
                                   // formatter.format(record.price),
                                   priceformat+record.price.toString(),
-                                  style: theme.textTheme.subtitle2,
+                                  style: theme.textTheme.subtitle1,
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.all(0),
-                                  child: FlatButton(
-                                    padding: EdgeInsets.only(left: 100, top:0, bottom:0),
-                                    child: Text('more', style: TextStyle(fontSize: 14),),
-                                    textColor: Colors.blue,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => DetailPage(),
-                                            settings: RouteSettings(
-                                              arguments: record,
-                                            )
+
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 0.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          record.complete.toString() == "false" ? "거래 미완료" : "거래 완료",
+                                          style: theme.textTheme.subtitle2,
                                         ),
-                                      );
-                                    },
+                                        FlatButton(
+                                          padding: EdgeInsets.only(left: 200, top:0, bottom:0),
+                                          child: Text('more', style: TextStyle(fontSize: 20),),
+                                          textColor: Colors.blue,
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => DetailPage(),
+                                                  settings: RouteSettings(
+                                                    arguments: record,
+                                                  )
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                   ),
-                                ),
+                                  ),
+                                )
                               ],
                             ),
                           ),

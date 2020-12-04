@@ -13,7 +13,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  int _selectedIndex = 1;
+  int _selectedIndex = 3;
   final _widgetOptions=[
     Text('index 0: Home'),
     Text('index 1: Search'),
@@ -160,14 +160,14 @@ class _MyPageState extends State<MyPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
-            label: 'search',
+            label: 'message',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
-            label: 'search',
+            label: 'profile',
           ),
         ],
-        fixedColor: Colors.pink,
+        fixedColor: Colors.black,
         onTap: _tapNavBar,
       ),
     );
