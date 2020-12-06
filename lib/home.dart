@@ -16,50 +16,52 @@ class HomePage extends StatefulWidget {
     return _HomePageState();
   }
 }
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   String dropdownValue = 'ASC';
   int _selectedIndex = 0;
 
   _tapNavBar(index) {
-    print('Tapped!'+index.toString());
-    if (index==0){
+    print('Tapped!' + index.toString());
+    if (index == 0) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => HomePage(),
             settings: RouteSettings(
-              // arguments: product,
-            )),
+                // arguments: product,
+                )),
       );
     }
-    if (index==1){
+    if (index == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => AddPage(),
             settings: RouteSettings(
-              // arguments: product,
-            )),
+                // arguments: product,
+                )),
       );
     }
-    if (index==2){
+    if (index == 2) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => HomePage(),
             settings: RouteSettings(
-              // arguments: product,
-            )),
+                // arguments: product,
+                )),
       );
     }
-    if (index==3){
+    if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MyPage(),
             settings: RouteSettings(
-              // arguments: product,
-            )),
+                // arguments: product,
+                )),
       );
     }
 
@@ -72,7 +74,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:  IconButton(
+        leading: IconButton(
           icon: Icon(
             Icons.person_rounded,
             semanticLabel: 'menu',
@@ -83,13 +85,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               MaterialPageRoute(
                   builder: (context) => MyPage(),
                   settings: RouteSettings(
-                    // arguments: product,
-                  )
-              ),
+                      // arguments: product,
+                      )),
             );
           },
         ),
-        title:Dropdown(context),
+        title: Dropdown(context),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -103,18 +104,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 MaterialPageRoute(
                     builder: (context) => AddPage(),
                     settings: RouteSettings(
-                      // arguments: product,
-                    )
-                ),
+                        // arguments: product,
+                        )),
               );
             },
           ),
-
         ],
       ),
-      body:
-
-      _buildGridCards(context),
+      body: _buildGridCards(context),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black,
         currentIndex: _selectedIndex,
@@ -141,6 +138,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
     );
   }
+
   Widget Dropdown(BuildContext context) {
     return DropdownButton<String>(
       value: dropdownValue,
@@ -148,7 +146,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       iconSize: 12,
       elevation: 16,
       underline: Container(
-        margin: EdgeInsets.fromLTRB(10.0,0,0,0),
+        margin: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
         height: 2,
         color: Colors.deepPurpleAccent,
       ),
@@ -157,115 +155,123 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           dropdownValue = newValue;
         });
       },
-      items: <String>['ASC', 'DESC']
-          .map<DropdownMenuItem<String>>((String value) {
+      items:
+          <String>['ASC', 'DESC'].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(' '+value),
+          child: Text(' ' + value),
         );
       }).toList(),
     );
   }
+
   Widget _buildGridCards(BuildContext context) {
-      bool checkASC=false;
-      dropdownValue =='ASC' ? checkASC=false : checkASC=true;
-      String priceformat="₩ ";
-  return Container(
-    child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('item').orderBy('price',descending: checkASC).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Text("Loading...");
-            default:
-              return GridView.count(
-              //   return ListView.builder(
-                crossAxisCount: 1,
-                padding: EdgeInsets.all(16.0),
-                childAspectRatio: 8.0 / 6.0,
-                children: snapshot.data.docs.map((data) {
-                  final record = Record.fromSnapshot(data);
-                  final ThemeData theme = Theme.of(context);
-                  final NumberFormat formatter = NumberFormat.simpleCurrency(
-                      locale: Localizations.localeOf(context).toString());
-                  return Card(
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-
-                        AspectRatio(
-                          // aspectRatio: 18 / 11,
-                          aspectRatio: 32 / 15,
-                          child: Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/'+record.name+'.jpg?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 0.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  record.title,
-                                  style: theme.textTheme.subtitle1,
-                                  maxLines: 1,
-                                ),
-                                Text(
-                                  // formatter.format(record.price),
-                                  priceformat+record.price.toString(),
-                                  style: theme.textTheme.subtitle1,
-                                ),
-
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 0.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(
-                                          record.complete.toString() == "false" ? "거래 미완료" : "거래 완료",
-                                          style: theme.textTheme.subtitle2,
-                                        ),
-                                        FlatButton(
-                                          padding: EdgeInsets.only(left: 200, top:0, bottom:0),
-                                          child: Text('more', style: TextStyle(fontSize: 20),),
-                                          textColor: Colors.blue,
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => DetailPage(),
-                                                  settings: RouteSettings(
-                                                    arguments: record,
-                                                  )
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                  ),
-                                  ),
-                                )
-                              ],
+    bool checkASC = false;
+    dropdownValue == 'ASC' ? checkASC = false : checkASC = true;
+    String priceformat = "₩ ";
+    return Container(
+      child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('item')
+              .orderBy('price', descending: checkASC)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Text("Loading...");
+              default:
+                return GridView.count(
+                  //   return ListView.builder(
+                  crossAxisCount: 1,
+                  padding: EdgeInsets.all(16.0),
+                  childAspectRatio: 8.0 / 6.0,
+                  children: snapshot.data.docs.map((data) {
+                    final record = Record.fromSnapshot(data);
+                    final ThemeData theme = Theme.of(context);
+                    final NumberFormat formatter = NumberFormat.simpleCurrency(
+                        locale: Localizations.localeOf(context).toString());
+                    return Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          AspectRatio(
+                            // aspectRatio: 18 / 11,
+                            aspectRatio: 32 / 15,
+                            child: Image.network(
+                              'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/' +
+                                  record.name +
+                                  '.jpg?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
+                              fit: BoxFit.fitWidth,
                             ),
                           ),
-
-                        ),
-
-                      ],
-                    ),
-                  );
-
-                }).toList(),
-              );
-          }
-        }
-    ),
-   );
-}
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 0.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    record.title,
+                                    style: theme.textTheme.subtitle1,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    // formatter.format(record.price),
+                                    priceformat + record.price.toString(),
+                                    style: theme.textTheme.subtitle1,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          4.0, 4.0, 4.0, 0.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(
+                                            record.complete.toString() ==
+                                                    "false"
+                                                ? "거래 미완료"
+                                                : "거래 완료",
+                                            style: theme.textTheme.subtitle2,
+                                          ),
+                                          FlatButton(
+                                            padding: EdgeInsets.only(
+                                                left: 200, top: 0, bottom: 0),
+                                            child: Text(
+                                              'more',
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            textColor: Colors.blue,
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailPage(),
+                                                    settings: RouteSettings(
+                                                      arguments: record,
+                                                    )),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                );
+            }
+          }),
+    );
+  }
 
 //   Future<void> downURL(Record record) async{
 //     return await firebase_storage.FirebaseStorage.instance
@@ -290,15 +296,14 @@ class Record {
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
         assert(map['like'] != null),
-        assert(map['price'] !=null),
-        assert(map['time'] !=null),
-        assert(map['title'] !=null),
-        assert(map['user_uid'] !=null),
-        assert(map['voteList'] !=null),
-        assert(map['description'] !=null),
-        assert(map['category'] !=null),
-        assert(map['complete'] !=null),
-
+        assert(map['price'] != null),
+        assert(map['time'] != null),
+        assert(map['title'] != null),
+        assert(map['user_uid'] != null),
+        assert(map['voteList'] != null),
+        assert(map['description'] != null),
+        assert(map['category'] != null),
+        assert(map['complete'] != null),
         name = map['name'],
         like = map['like'],
         price = map['price'],
@@ -310,8 +315,10 @@ class Record {
         complete = map['complete'],
         description = map['description'];
 
-  Record.fromSnapshot(DocumentSnapshot snapshot)       : this.fromMap(snapshot.data(), reference: snapshot.reference);
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$name:$like$price$description$time$user_uid$title$voteList$category$complete>";
+  String toString() =>
+      "Record<$name:$like$price$description$time$user_uid$title$voteList$category$complete>";
 }

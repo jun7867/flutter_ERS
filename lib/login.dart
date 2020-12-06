@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ers/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'package:ers/helper/helperfunctions.dart';
 import 'home.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 10.0),
             _OtherProvidersSignInSection(),
-            _AnonymouslySignInSection(),
+            // _AnonymouslySignInSection(),
           ],
         ),
       ),

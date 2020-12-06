@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'add.dart';
+import 'chatrooms.dart';
 import 'login.dart';
 
 class MyPage extends StatefulWidget {
@@ -140,6 +141,20 @@ class _MyPageState extends State<MyPage> {
               padding: const EdgeInsets.all(4.0),
               child: getEmail(),
             ),
+            GestureDetector(
+              onTap: () {
+                // AuthService().signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => ChatRoom()));
+              },
+              child: Container(
+
+                child: Text('나의 채팅 목록', style: TextStyle(fontSize: 24)),
+
+                color: Colors.white,
+              ),
+            )
+
           ],
         ),
       ),
