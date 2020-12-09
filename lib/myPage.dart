@@ -84,8 +84,8 @@ class _MyPageState extends State<MyPage> {
 
   getEmail() {
     if (_firebaseAuth.currentUser.email != null) {
-      return Text(_firebaseAuth.currentUser.email,
-          style: TextStyle(fontSize: 30));
+      return Text("Email :  "+_firebaseAuth.currentUser.email,
+          style: TextStyle(fontSize: 24));
     } else {
       return Text("Anonymous", style: TextStyle(fontSize: 30));
     }
@@ -129,9 +129,9 @@ class _MyPageState extends State<MyPage> {
             ),
             Text(
               _firebaseAuth.currentUser.displayName != null
-                  ? _firebaseAuth.currentUser.displayName
+                  ? "ID(Name) :  "+ _firebaseAuth.currentUser.displayName
                   : "Name",
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 24),
             ),
             Divider(
               height: 5,
@@ -141,6 +141,7 @@ class _MyPageState extends State<MyPage> {
               padding: const EdgeInsets.all(4.0),
               child: getEmail(),
             ),
+            SizedBox(height: 30,),
             GestureDetector(
               onTap: () {
                 // AuthService().signOut();
@@ -149,9 +150,8 @@ class _MyPageState extends State<MyPage> {
               },
               child: Container(
 
-                child: Text('나의 채팅 목록', style: TextStyle(fontSize: 24)),
-
-                color: Colors.white,
+                child: Text('메세지함 이동', style: TextStyle(fontSize: 24,color: Colors.amber)),
+                // color: Colors.white,
               ),
             )
 

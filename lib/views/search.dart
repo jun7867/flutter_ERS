@@ -68,15 +68,6 @@ class _SearchState extends State<Search> {
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //       builder: (context) => Chat(),
-    //       settings: RouteSettings(
-    //         chatRoomId: chatRoomId,
-    //       )),
-    // );
-
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => Chat(
         chatRoomId: chatRoomId,

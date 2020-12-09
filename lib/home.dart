@@ -292,7 +292,9 @@ class Record {
   final String user_uid;
   final String voteList;
   final String category;
+  final String creator;
   final bool complete;
+
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
@@ -305,6 +307,7 @@ class Record {
         assert(map['description'] != null),
         assert(map['category'] != null),
         assert(map['complete'] != null),
+        assert(map['creator'] != null),
         name = map['name'],
         like = map['like'],
         price = map['price'],
@@ -314,12 +317,13 @@ class Record {
         voteList = map['voteList'],
         category = map['category'],
         complete = map['complete'],
-        description = map['description'];
+        description = map['description'],
+        creator = map['creator'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
   String toString() =>
-      "Record<$name:$like$price$description$time$user_uid$title$voteList$category$complete>";
+      "Record<$name:$like$price$description$time$user_uid$title$voteList$category$complete$creator>";
 }

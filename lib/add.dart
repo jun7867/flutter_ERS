@@ -105,6 +105,7 @@ class _AddPageState extends State<AddPage> {
                 'complete': boolInit,
                 'user_uid': _firebaseAuth.currentUser.uid,
                 'voteList': "null",
+                "creator": _firebaseAuth.currentUser.displayName
               }).then((value) => print('Added'));
 
               Navigator.push(

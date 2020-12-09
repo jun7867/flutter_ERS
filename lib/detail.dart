@@ -1,5 +1,7 @@
 // import 'package:Shrine/edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ers/services/database.dart';
+import 'package:ers/views/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'edit.dart';
@@ -13,6 +15,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
 
   getProfileImage() {
     if (_firebaseAuth.currentUser.photoURL != null) {
@@ -33,6 +36,34 @@ class _DetailPageState extends State<DetailPage> {
           style: TextStyle(fontSize: 30));
     } else {
       return Text("Anonymous", style: TextStyle(fontSize: 30));
+    }
+  }
+  sendMessage(String userName){
+
+    List<String> users = [_firebaseAuth.currentUser.displayName,userName];
+    String chatRoomId = getChatRoomId(_firebaseAuth.currentUser.displayName,userName);
+    // String chatRoomId = getChatRoomId('nam',userName);
+
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId" : chatRoomId,
+    };
+    print("In search Page"+chatRoomId+"  "+chatRoom.toString());
+
+    databaseMethods.addChatRoom(chatRoom, chatRoomId);
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Chat(
+          chatRoomId: chatRoomId,
+        )
+    ));
+
+  }
+  getChatRoomId(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
     }
   }
 
@@ -138,7 +169,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Container(
                     child: Column(
-                      // 여기다가 padding 추가
+                  // 여기다가 padding 추가
                   children: <Widget>[
                     Padding(padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10)),
                     Text(record.complete ? "현재 상태:  거래 완료" : "현재상태:  거래 미완료"),
@@ -156,17 +187,11 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ],
                 )),
-                // SizedBox(height: 50,),
-                // FlatButton(
-                //   onPressed: null,
-                //   child: Text('채팅으로 거래하기', style: TextStyle(fontSize: 24)),
-                //   color: Colors.amber,
-                //   textColor: Colors.white,
-                // ),
-                // Text(
-                //   "작성자: " + _firebaseAuth.currentUser.email,
-                //   style: TextStyle(fontSize: 15),
-                // ),
+
+                Text(
+                  "작성자: " + record.creator,
+                  style: TextStyle(fontSize: 15),
+                ),
                 // Text(
                 //   "게시글 작성일:  " + dateTime.toString(),
                 //   style: TextStyle(fontSize: 15),
@@ -190,14 +215,6 @@ class _DetailPageState extends State<DetailPage> {
                                     }),
                                     scaffoldKey.currentState.showSnackBar(
                                         SnackBar(content: Text("I like it"))),
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => DetailPage(),
-                                    //         settings: RouteSettings(
-                                    //           arguments: record,
-                                    //         )
-                                    //     ))
                                   }
                                 else
                                   {
@@ -212,6 +229,16 @@ class _DetailPageState extends State<DetailPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                     ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    sendMessage(record.creator);
+                  },
+                  child: Container(
+                    child: Text('채팅하기',
+                        style: TextStyle(fontSize: 24, color: Colors.amber)),
+                    // color: Colors.white,
                   ),
                 ),
               ],
