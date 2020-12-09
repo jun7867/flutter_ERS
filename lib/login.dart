@@ -163,6 +163,18 @@ class _OtherProvidersSignInSectionState
         content: Text("Sign In ${user.uid} with Google"),
       ));
 
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_auth.currentUser.uid)
+          .set({
+        "userEmail": _auth.currentUser.email,
+        "userName": _auth.currentUser.displayName,
+        "userUid": _auth.currentUser.uid,
+        "userPhone": _auth.currentUser.phoneNumber,
+        "userPhoto": _auth.currentUser.photoURL,
+      }).then((value) => print('Added'));
+
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
 
 

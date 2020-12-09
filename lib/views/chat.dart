@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
   final String chatRoomId;
-
   Chat({this.chatRoomId});
 
   @override
@@ -15,11 +14,11 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
   Widget chatMessages(){
+
     return StreamBuilder(
       stream: chats,
       builder: (context, snapshot){
@@ -27,8 +26,8 @@ class _ChatState extends State<Chat> {
           itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index){
               return MessageTile(
-                message: snapshot.data.documents[index].data["message"],
-                sendByMe: Constants.myName == snapshot.data.documents[index].data["sendBy"],
+                message: snapshot.data.documents[index].data()["message"],
+                sendByMe: Constants.myName == snapshot.data.documents[index].data()["sendBy"],
               );
             }) : Container();
       },
@@ -36,14 +35,19 @@ class _ChatState extends State<Chat> {
   }
 
   addMessage() {
+    print("sendby"+Constants.myName);
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
+        // "sendBy": Constants.myName,
         "sendBy": Constants.myName,
         "message": messageEditingController.text,
         'time': DateTime
             .now()
             .millisecondsSinceEpoch,
       };
+      print('In chat');
+      print(widget.chatRoomId);
+      print(chatMessageMap);
 
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
 
@@ -66,8 +70,14 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppBar(
+        title: Text("Chat Room"),
+        elevation: 0.0,
+        centerTitle: false,
+
+      ),
       body: Container(
+        color: Colors.amber,
         child: Stack(
           children: [
             chatMessages(),
@@ -78,7 +88,8 @@ class _ChatState extends State<Chat> {
                   .width,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                color: Color(0x54FFFFFF),
+                // color: Color(0x54FFFFFF),
+                color: Colors.amber,
                 child: Row(
                   children: [
                     Expanded(
@@ -89,7 +100,7 @@ class _ChatState extends State<Chat> {
                               hintText: "Message ...",
                               hintStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 20,
                               ),
                               border: InputBorder.none
                           ),
@@ -103,18 +114,11 @@ class _ChatState extends State<Chat> {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    const Color(0x36FFFFFF),
-                                    const Color(0x0FFFFFFF)
-                                  ],
-                                  begin: FractionalOffset.topLeft,
-                                  end: FractionalOffset.bottomRight
-                              ),
+
                               borderRadius: BorderRadius.circular(40)
                           ),
                           padding: EdgeInsets.all(12),
-                          child: Image.asset("assets/images/send.png",
+                          child: Image.asset("assets/send.png",
                             height: 25, width: 25,)),
                     ),
                   ],
@@ -176,7 +180,7 @@ class MessageTile extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 20,
             fontFamily: 'OverpassRegular',
             fontWeight: FontWeight.w300)),
       ),

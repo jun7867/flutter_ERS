@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'add.dart';
+import 'chatrooms.dart';
 import 'detail.dart';
 import 'myPage.dart';
 
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage>
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => ChatRoom(),
             settings: RouteSettings(
                 // arguments: product,
                 )),
@@ -118,19 +119,19 @@ class _HomePageState extends State<HomePage>
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: '홈',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
-            label: 'search',
+            label: '글쓰기',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
-            label: 'message',
+            label: '채팅방',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
-            label: 'profile',
+            label: '마이페이지',
           ),
         ],
         fixedColor: Colors.black,

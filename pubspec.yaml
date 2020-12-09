@@ -51,6 +51,7 @@ flutter:
   assets:
     - assets/ERS.png
     - assets/logo.png
+    - assets/images/logo.png
     - assets/send.png
     - assets/search_white.png
 

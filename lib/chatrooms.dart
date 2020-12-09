@@ -1,5 +1,6 @@
 import 'helper/constants.dart';
 import 'helper/helperfunctions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'services/auth.dart';
 import 'services/database.dart';
 import 'views/chat.dart';
@@ -14,6 +15,7 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Stream chatRooms;
 
   Widget chatRoomsList() {
@@ -26,11 +28,11 @@ class _ChatRoomState extends State<ChatRoom> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return ChatRoomsTile(
-                userName: snapshot.data.documents[index].data['chatRoomId']
+                userName: snapshot.data.documents[index].data()['chatRoomId']
                     .toString()
                     .replaceAll("_", "")
                     .replaceAll(Constants.myName, ""),
-                chatRoomId: snapshot.data.documents[index].data["chatRoomId"],
+                chatRoomId: snapshot.data.documents[index].data()["chatRoomId"],
               );
             })
             : Container();
@@ -45,7 +47,8 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   getUserInfogetChats() async {
-    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    // Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    Constants.myName = await _firebaseAuth.currentUser.displayName;
     DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
       setState(() {
         chatRooms = snapshots;
@@ -59,24 +62,10 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          "assets/images/logo.png",
-          height: 40,
-        ),
+        title: Text("채팅방 목록"),
         elevation: 0.0,
         centerTitle: false,
-        actions: [
-          // GestureDetector(
-          //   onTap: () {
-          //     AuthService().signOut();
-          //     Navigator.pushReplacement(context,
-          //         MaterialPageRoute(builder: (context) => Authenticate()));
-          //   },
-          //   child: Container(
-          //       padding: EdgeInsets.symmetric(horizontal: 16),
-          //       child: Icon(Icons.exit_to_app)),
-          // )
-        ],
+
       ),
       body: Container(
         child: chatRoomsList(),
@@ -84,7 +73,6 @@ class _ChatRoomState extends State<ChatRoom> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          print("search!!!@!@!@!@!@!@!@");
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Search()));
         },
@@ -110,7 +98,7 @@ class ChatRoomsTile extends StatelessWidget {
         ));
       },
       child: Container(
-        color: Colors.black26,
+        color: Colors.amber,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Row(
           children: [
@@ -124,7 +112,7 @@ class ChatRoomsTile extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 23,
                       fontFamily: 'OverpassRegular',
                       fontWeight: FontWeight.w300)),
             ),
@@ -134,10 +122,10 @@ class ChatRoomsTile extends StatelessWidget {
             Text(userName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    color: Colors.black,
+                    fontSize: 22,
                     fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
+                    fontWeight: FontWeight.w400))
           ],
         ),
       ),

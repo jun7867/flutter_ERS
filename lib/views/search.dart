@@ -4,6 +4,7 @@ import 'package:ers/services/database.dart';
 import 'package:ers/views/chat.dart';
 import 'package:ers/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -12,7 +13,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchResultSnapshot;
@@ -21,7 +22,6 @@ class _SearchState extends State<Search> {
   bool haveUserSearched = false;
 
   initiateSearch() async {
-    print("what!");
     if(searchEditingController.text.isNotEmpty){
       setState(() {
         isLoading = true;
@@ -54,30 +54,34 @@ class _SearchState extends State<Search> {
   sendMessage(String userName){
 
     List<String> users = [Constants.myName,userName];
-
+    print(users);
+    print(Constants.myName);
+    print(userName);
     String chatRoomId = getChatRoomId(Constants.myName,userName);
-    print("fifzzi");
+    // String chatRoomId = getChatRoomId('nam',userName);
+
     Map<String, dynamic> chatRoom = {
       "users": users,
       "chatRoomId" : chatRoomId,
     };
+    print("In search Page"+chatRoomId+"  "+chatRoom.toString());
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
-    print("clciclciclci");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Chat(),
-          settings: RouteSettings(
-            arguments: chatRoomId,
-          )),
-    );
 
-    // Navigator.push(context, MaterialPageRoute(
-    //   builder: (context) => Chat(
-    //     chatRoomId: chatRoomId,
-    //   )
-    // ));
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => Chat(),
+    //       settings: RouteSettings(
+    //         chatRoomId: chatRoomId,
+    //       )),
+    // );
+
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => Chat(
+        chatRoomId: chatRoomId,
+      )
+    ));
 
   }
 
@@ -108,7 +112,6 @@ class _SearchState extends State<Search> {
           Spacer(),
           GestureDetector(
             onTap: (){
-              print("clickkkkkk");
               sendMessage(userName);
             },
             child: Container(
@@ -150,7 +153,12 @@ class _SearchState extends State<Search> {
     final _formKey = GlobalKey<FormState>();
     String _nameValue = "test";
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppBar(
+        title: Text("Chat Search"),
+        elevation: 0.0,
+        centerTitle: false,
+
+      ),
       body: Container(
         child: Column(
           children: [
