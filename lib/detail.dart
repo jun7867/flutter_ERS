@@ -123,31 +123,37 @@ class _DetailPageState extends State<DetailPage> {
         child: ListView(
           children: <Widget>[
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(padding: EdgeInsets.fromLTRB(0.0, 0, 20.0, 0)),
-                Center(
-                  child: Image.network(
+                Center (
+                  // testing.jpg?alt=media&token=42920971-ebec-4fd2-9f1c-edd2a68936a1
+                  child: Image.network (
                     'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/' +
                         record.name +
-                        '.png?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
+                        '.jpg?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
                     fit: BoxFit.fitWidth,
                     width: 500,
                     height: 200,
                   ),
                 ),
-
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   child: Row(
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(0, 10, 20.0, 10)),
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
+                      Padding(padding: EdgeInsets.fromLTRB(0, 20, 20.0, 10)),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(30.0), // 동그랗게 만들기
                         child: getProfileImage(),
-                      ), // 동그랗게 만들기
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
                       Text(
-                        _firebaseAuth.currentUser.email,
+                        record.creator,
                         style: TextStyle(fontSize: 20),
                       ),
                     ],
@@ -169,12 +175,14 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Container(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                   // 여기다가 padding 추가
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10)),
+
+                    Padding(padding: EdgeInsets.fromLTRB(20.0, 0, 10.0, 10)),
                     Text(record.complete ? "현재 상태:  거래 완료" : "현재상태:  거래 미완료"),
                     Text(
-                      "\$ " + record.price.toString(),
+                      "\₩ " + record.price.toString(),
                       style: TextStyle(fontSize: 20),
                     ),
                     Divider(
@@ -187,15 +195,10 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ],
                 )),
-
                 Text(
-                  "작성자: " + record.creator,
+                  "게시글 작성일:  " + dateTime.toString(),
                   style: TextStyle(fontSize: 15),
                 ),
-                // Text(
-                //   "게시글 작성일:  " + dateTime.toString(),
-                //   style: TextStyle(fontSize: 15),
-                // ),
 
                 Container(
                   child: Row(

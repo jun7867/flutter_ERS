@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:ers/helper/constants.dart';
 import 'package:ers/services/database.dart';
-import 'package:ers/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +93,7 @@ class _ChatState extends State<Chat> {
                     Expanded(
                         child: TextField(
                           controller: messageEditingController,
-                          style: simpleTextStyle(),
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                           decoration: InputDecoration(
                               hintText: "Message ...",
                               hintStyle: TextStyle(

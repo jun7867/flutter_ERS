@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:ers/helper/helperfunctions.dart';
 import 'home.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -118,13 +117,14 @@ class _OtherProvidersSignInSectionState
   @override
   Widget build(BuildContext context) {
     return Card(
+      // color: Colors.amber,
       child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.only(top: 16.0),
+                // padding: const EdgeInsets.only(left: 0.0),
                 alignment: Alignment.center,
                 child: SignInButton(Buttons.GoogleDark,
                   text: "Google",
@@ -187,4 +187,3 @@ class _OtherProvidersSignInSectionState
     }
   }
 }
-// TODO: Add AccentColorOverride (103)

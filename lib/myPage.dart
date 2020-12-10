@@ -47,7 +47,7 @@ class _MyPageState extends State<MyPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => ChatRoom(),
             settings: RouteSettings(
               // arguments: product,
             )),
@@ -72,7 +72,7 @@ class _MyPageState extends State<MyPage> {
   getProfileImage() {
     if (_firebaseAuth.currentUser.photoURL != null) {
       return Image.network(_firebaseAuth.currentUser.photoURL,
-          height: 250, width: 500);
+          height: 150, width: 500);
     } else {
       return Image.asset(
         "assets/logo.png",
@@ -123,8 +123,8 @@ class _MyPageState extends State<MyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0)),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30.0), // 동그랗게 만들기
               child: getProfileImage(),
             ),
             Text(
@@ -163,23 +163,21 @@ class _MyPageState extends State<MyPage> {
         unselectedItemColor: Colors.black,
         currentIndex: _selectedIndex,
         items: <BottomNavigationBarItem>[
-
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            backgroundColor: Colors.white,
-            label: 'Home',
+            label: '홈',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
-            label: 'search',
+            label: '글쓰기',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
-            label: 'message',
+            label: '채팅방',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
-            label: 'profile',
+            label: '마이페이지',
           ),
         ],
         fixedColor: Colors.black,

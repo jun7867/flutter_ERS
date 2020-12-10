@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage>
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.add,
+              Icons.edit,
               semanticLabel: 'filter',
             ),
             onPressed: () {
@@ -273,12 +273,6 @@ class _HomePageState extends State<HomePage>
           }),
     );
   }
-
-//   Future<void> downURL(Record record) async{
-//     return await firebase_storage.FirebaseStorage.instance
-//         .ref('images/' + record.name + '.jpg')
-//         .getDownloadURL().toString();
-//   }
 }
 
 class Record {

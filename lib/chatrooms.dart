@@ -1,13 +1,9 @@
 import 'helper/constants.dart';
-import 'helper/helperfunctions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'services/auth.dart';
 import 'services/database.dart';
 import 'views/chat.dart';
 import 'package:ers/views/search.dart';
 import 'package:flutter/material.dart';
-
-import 'helper/theme.dart';
 
 class ChatRoom extends StatefulWidget {
   @override
@@ -106,7 +102,7 @@ class ChatRoomsTile extends StatelessWidget {
               height: 30,
               width: 30,
               decoration: BoxDecoration(
-                  color: CustomTheme.colorAccent,
+                  color: Color(0xff007EF4),
                   borderRadius: BorderRadius.circular(30)),
               child: Text(userName.substring(0, 1),
                   textAlign: TextAlign.center,
