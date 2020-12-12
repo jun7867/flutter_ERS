@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage>
                                       child: Row(
                                         children: <Widget>[
                                           Text(
-                                            record.complete.toString() ==
+                                            record.complete ==
                                                     "false"
                                                 ? "거래 미완료"
                                                 : "거래 완료",
@@ -287,7 +287,7 @@ class Record {
   final String voteList;
   final String category;
   final String creator;
-  final bool complete;
+  final String complete;
 
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})

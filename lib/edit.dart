@@ -15,7 +15,6 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-
   User _user;
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   File _image;
@@ -65,9 +64,22 @@ class _EditPageState extends State<EditPage> {
       print(e);
     }
   }
+  void _handleGenderChange(String value) {
+    setState(() {
+      _radioValue = value;
+    });
+  }
+  void _handleGenderChange2(String value) {
+    setState(() {
+      _radioValue2 = value;
+    });
+  }
+
   TextEditingController _name = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
+  String _radioValue = "food";
+  String _radioValue2 = "false";
   @override
   Widget build(BuildContext context) {
     final Record record = ModalRoute.of(context).settings.arguments;
@@ -95,11 +107,13 @@ class _EditPageState extends State<EditPage> {
               print(_name.text);
 
               await FirebaseFirestore.instance.collection('item').doc(_name.text).update({
-                "name": _name.text,
-                'price' : int.parse(_price.text),
-                'description' : _description.text,
                 'modified' : FieldValue.serverTimestamp(),
-                'user_uid' : _firebaseAuth.currentUser.uid,
+                'like': 0,
+                'price': int.parse(_price.text),
+                'description': _description.text,
+                'category': _radioValue,
+                'complete': _radioValue2,
+                'user_uid': _firebaseAuth.currentUser.uid,
 
               }).then((value) => print('Edit'));
 
@@ -118,90 +132,114 @@ class _EditPageState extends State<EditPage> {
         ],
       ),
       body: Container(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
             children: <Widget>[
-              // Padding(padding: EdgeInsets.fromLTRB(20.0,0,20.0,0)),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    _showPicker(context);
-                  },
-                  child: Image.network(
-                    'https://firebasestorage.googleapis.com/v0/b/mdcfinal.appspot.com/o/'+record.name+'.jpg?alt=media&token=c6b0bcca-818d-40e0-8f3c-31caba0fcddd',
-                    fit: BoxFit.fitWidth,
-                    width: 400,
-                    height: 100,
-                  ),
-                ),
-              ),
-
-              IconButton(   // NEW from here...
-                icon: Icon(Icons.camera_alt_outlined,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                onPressed: () {
-                  print("click");
-                  _showPicker(context);
-                },
-              ),
-              Container(
-                key: _formKey,
-                height: 170.0,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    TextFormField(
-                      validator: (value1) {
-                        if (value1.isEmpty) {
-                          return 'Please enter name';
-                        }
-                        return null;
-                      },
+                    // Padding(padding: EdgeInsets.fromLTRB(20.0,0,20.0,0)),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          _showPicker(context);
+                        },
+                        child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/' +
+                              record.name +
+                              '.jpg?alt=media&token=97b17f7a-25f5-4d36-9f51-496600d6b5df',
+                          fit: BoxFit.fitWidth,
+                          width: 400,
+                          height: 200,
+                        ),
+                      ),
+                    ),
 
-                      onSaved: (value1) => _nameValue=value1,
-                      controller: _name,
-                      decoration: InputDecoration(
-                        filled: true,
-                        labelText: "Input Name",
+                    IconButton(   // NEW from here...
+                      icon: Icon(Icons.camera_alt_outlined,
+                        color: Colors.black,
+                        size: 20,
                       ),
-                    ),
-                    TextFormField(
-                      validator: (value2) {
-                        if (value2.isEmpty) {
-                          return 'Please enter price';
-                        }
-                        return null;
+                      onPressed: () {
+                        print("click");
+                        _showPicker(context);
                       },
-                      keyboardType: TextInputType.number,
-                      onSaved: (value2) => _priceValue=int.parse(value2),
-                      controller: _price,
-                      decoration: InputDecoration(
-                        filled: true,
-                        labelText: 'Price',
+                    ),
+                    Container(
+                      key: _formKey,
+                      height: 400.0,
+                      child: ListView(
+                        scrollDirection: Axis.vertical,
+                        children: <Widget>[
+                          TextFormField(
+                            validator: (value2) {
+                              if (value2.isEmpty) {
+                                return 'Please enter price';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            onSaved: (value2) => _priceValue = int.parse(value2),
+                            controller: _price,
+                            decoration: InputDecoration(
+                              filled: true,
+                              labelText: '심부름 가격(원)',
+                            ),
+                          ),
+                          TextFormField(
+                            validator: (value3) {
+                              if (value3.isEmpty) {
+                                return 'Please enter Confirm Password';
+                              }
+                              return null;
+                            },
+                            onSaved: (value3) => _descriptionValue = value3,
+                            controller: _description,
+                            decoration: InputDecoration(
+                              filled: true,
+                              labelText: '글 설명',
+                            ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text("카테고리: "),
+                              Radio<String>(
+                                value: "food",
+                                groupValue: _radioValue,
+                                onChanged: _handleGenderChange,
+                              ),
+                              Text("food"),
+                              Radio<String>(
+                                value: "etc",
+                                groupValue: _radioValue,
+                                onChanged: _handleGenderChange,
+                              ),
+                              Text("기타 심부름(etc)"),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text("완료 여부: "),
+                              Radio<String>(
+                                value: "true",
+                                groupValue: _radioValue2,
+                                onChanged: _handleGenderChange2,
+                              ),
+                              Text("거래 완료"),
+                              Radio<String>(
+                                value: "false",
+                                groupValue: _radioValue2,
+                                onChanged: _handleGenderChange2,
+                              ),
+                              Text("거래 미완료"),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    TextFormField(
-                      validator: (value3) {
-                        if (value3.isEmpty) {
-                          return 'Please enter Confirm Password';
-                        }
-                        return null;
-                      },
-                      onSaved: (value3) => _descriptionValue=value3,
-                      controller: _description,
-                      decoration: InputDecoration(
-                        filled: true,
-                        labelText: 'Description',
-                      ),
-                    ),
-                  ],
-                ),
+                  ]
               ),
-            ]
+              ],
         ),
-
       ),
     );
   }

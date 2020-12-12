@@ -1,4 +1,3 @@
-// import 'package:Shrine/edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ers/services/database.dart';
 import 'package:ers/views/chat.dart';
@@ -99,6 +98,9 @@ class _DetailPageState extends State<DetailPage> {
                                   arguments: record,
                                 )))
                       }
+                    else{
+                       showAlertDialog(context)
+                    }
                   }),
           IconButton(
               icon: new Icon(Icons.delete),
@@ -120,15 +122,14 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
       body: Container(
+        color: Color.fromRGBO(255, 255, 255, 1),
         child: ListView(
           children: <Widget>[
             Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(padding: EdgeInsets.fromLTRB(0.0, 0, 20.0, 0)),
-                Center (
-                  // testing.jpg?alt=media&token=42920971-ebec-4fd2-9f1c-edd2a68936a1
+                ClipRRect (
+                  borderRadius: BorderRadius.circular(10.0), // 동그랗게 만들기
                   child: Image.network (
                     'https://firebasestorage.googleapis.com/v0/b/ers-service.appspot.com/o/' +
                         record.name +
@@ -154,101 +155,222 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       Text(
                         record.creator,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 15),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 12,
                 ),
                 Container(
                   child: Row(
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0)),
+                      Padding(padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 40)),
                       Text(
-                        record.title,
-                        style: TextStyle(fontSize: 20),
+                        "제목",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                                padding:
+                                EdgeInsets.fromLTRB(10.0, 0, 10.0, 40)),
+                            Text(
+                              record.title,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
+                    padding: EdgeInsets.fromLTRB(20.0, 0, 10, 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                  // 여기다가 padding 추가
-                  children: <Widget>[
 
-                    Padding(padding: EdgeInsets.fromLTRB(20.0, 0, 10.0, 10)),
-                    Text(record.complete ? "현재 상태:  거래 완료" : "현재상태:  거래 미완료"),
-                    Text(
-                      "\₩ " + record.price.toString(),
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Divider(
-                      height: 5,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      record.description,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                )),
-                Text(
-                  "게시글 작성일:  " + dateTime.toString(),
-                  style: TextStyle(fontSize: 15),
-                ),
-
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(
-                            Icons.thumb_up,
-                            color: Colors.red,
+                      // 여기다가 padding 추가
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    "가격    ",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              "\₩ " + record.price.toString(),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "내용    ",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                                overflow: TextOverflow.clip,
+                                softWrap: true,
+                              ),
+                              SizedBox(
+                                width:
+                                MediaQuery.of(context).size.width / 3 * 2,
+                                child: Text(
+                                  record.description,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.clip,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14.0),
+                                ),
+                              ),
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 0, 10.0, 0)),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          onPressed: () async => {
-                                if (record.voteList !=
-                                    _firebaseAuth.currentUser.uid)
-                                  {
-                                    await record.reference.update({
-                                      'like': FieldValue.increment(1),
-                                      'voteList': _firebaseAuth.currentUser.uid,
-                                    }),
-                                    scaffoldKey.currentState.showSnackBar(
-                                        SnackBar(content: Text("I like it"))),
-                                  }
-                                else
-                                  {
-                                    scaffoldKey.currentState.showSnackBar(
-                                        SnackBar(
+                        ),
+                        Text(
+                          record.complete == "true" ? "현재 상태 :  거래 완료" : "현재상태:  거래 미완료",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async => {
+                                    if (record.voteList !=
+                                        _firebaseAuth.currentUser.uid)
+                                      {
+                                        await record.reference.update({
+                                          'like': FieldValue.increment(1),
+                                          'voteList':
+                                          _firebaseAuth.currentUser.uid,
+                                        }),
+                                        scaffoldKey.currentState
+                                            .showSnackBar(SnackBar(
+                                            content:
+                                            Text("I like it"))),
+                                      }
+                                    else
+                                      {
+                                        scaffoldKey.currentState
+                                            .showSnackBar(SnackBar(
                                             content: Text(
                                                 "You can only do it once!!")))
-                                  },
-                              }),
-                      Text(
-                        record.like.toString(),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
+                                      },
+                                  }),
+                              Text(
+                                record.like.toString(),
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          height: 5,
+                          color: Colors.black,
+                        ),
+                      ],
+                    )),
                 GestureDetector(
                   onTap: () {
                     sendMessage(record.creator);
                   },
                   child: Container(
-                    child: Text('채팅하기',
-                        style: TextStyle(fontSize: 24, color: Colors.amber)),
-                    // color: Colors.white,
+                    //alignment: Alignment.bottomRight,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xff007EF4),
+                            const Color(0xff2A75BC)
+                          ],
+                        )),
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Text(
+                      "채팅하기",
+                      style: TextStyle(color: Colors.white, fontSize: 17),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
+                Text(
+                  "게시글 작성일:  " + dateTime.toString(),
+                  style: TextStyle(fontSize: 15),
+                ),
               ],
+
             ),
           ],
         ),
       ),
     );
+  }
+  void showAlertDialog(BuildContext context) async {
+    String result = await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog'),
+          content: Text("글의 작성자가 아닙니다."),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context, "OK");
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    scaffoldKey.currentState
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text("글 작성자를 확인해주세요"),
+          backgroundColor: Colors.orange,
+          action: SnackBarAction(
+            label: "Done",
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+        ),
+      );
   }
 }

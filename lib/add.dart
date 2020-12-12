@@ -74,7 +74,7 @@ class _AddPageState extends State<AddPage> {
     String _nameValue = "test";
     int _priceValue = 0;
     String _descriptionValue = "test";
-    bool boolInit = false;
+    // bool boolInit = false;
     return Scaffold(
       appBar: AppBar(
         leading: new IconButton(
@@ -102,7 +102,7 @@ class _AddPageState extends State<AddPage> {
                 'description': _description.text,
                 'time': FieldValue.serverTimestamp(),
                 'category': _radioValue,
-                'complete': boolInit,
+                'complete': "false",
                 'user_uid': _firebaseAuth.currentUser.uid,
                 'voteList': "null",
                 "creator": _firebaseAuth.currentUser.displayName
