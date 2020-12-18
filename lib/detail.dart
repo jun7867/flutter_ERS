@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ers/services/database.dart';
-import 'package:ers/views/chat.dart';
+import 'package:ers/chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'edit.dart';

@@ -1,8 +1,8 @@
 import 'helper/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'services/database.dart';
-import 'views/chat.dart';
-import 'package:ers/views/search.dart';
+import 'chat.dart';
+import 'package:ers/search.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoom extends StatefulWidget {
